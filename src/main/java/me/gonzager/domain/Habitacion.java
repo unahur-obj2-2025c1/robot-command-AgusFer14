@@ -2,18 +2,12 @@ package me.gonzager.domain;
 
 public class Habitacion {
 
-    private String nombre;
     private Boolean luzEncendida;
-    private Integer metrosCuadrados;
+    private final Integer metrosCuadrados;
 
-    public Habitacion(String nombre, Boolean luzEncendida, Integer metrosCuadrados) {
-        this.nombre = nombre;
+    public Habitacion( Boolean luzEncendida, Integer metrosCuadrados) {
         this.luzEncendida = luzEncendida;
         this.metrosCuadrados = metrosCuadrados;
-    }
-
-    public String getNombre() {
-        return nombre;
     }
 
     public Boolean getLuzEncendida() {
@@ -24,11 +18,8 @@ public class Habitacion {
         return metrosCuadrados;
     }
 
-    public void encederLuz() {
-        this.luzEncendida = true;
+    public void setLuzEncendida(Boolean luzEncendida) {
+        this.luzEncendida = luzEncendida;
     }
 
-    public void apagarLuz() {
-        this.luzEncendida = false;
-    }
 }

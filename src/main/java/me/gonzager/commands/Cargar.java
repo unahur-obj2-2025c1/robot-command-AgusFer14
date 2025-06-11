@@ -4,17 +4,19 @@ import me.gonzager.domain.Robot;
 
 public class Cargar extends Tarea {
 
-    private Integer minutosCarga;
+    private Integer minutos;
 
-    public Cargar(String descripcion, Integer duracion, Double consumoBateria) {
-        super(descripcion, duracion, consumoBateria);
-        
+    public Cargar(Integer minutos) {
+        if(minutos > Robot.duracionEnMinutos || minutos < 0)
+            throw new IllegalArgumentException("Parametro de minutos incorrecto.");
+        this.minutos = minutos;
     }
 
     @Override
-    protected void realizarTarea(Robot robot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'realizarTarea'");
+    public void doExecute(Robot robot) {
+        var tiempoMaximo = Robot.duracionEnMinutos - robot.getTiempoRestante() * 60;
+        var duracionEnMinutos = Double.min(minutos, tiempoMaximo);
+        robot.cargarBateria(duracionEnMinutos * 100 / Robot.duracionEnMinutos);
     }
     
 }

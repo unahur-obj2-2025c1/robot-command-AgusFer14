@@ -3,56 +3,51 @@ package me.gonzager.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.gonzager.commands.Tarea;
+import me.gonzager.commands.ITarea;
 
 
 public class Robot {
 
-    private Double bateria;
-    private final Double duracionEnMinutos = 125.0;
-    private final Double aumentoPorCarga = 0.8;
-    private List<TareaEjecutada> tareasEjecutadas;
+    Double bateria = 0.0;
+    public static final Integer duracionEnMinutos = 125;
+    List<ITarea> tareasPendientes = new ArrayList<>();
 
-    public Robot(Double bateria, List<TareaEjecutada> tareasEjecutadas) {
-        this.bateria = bateria;
-        this.tareasEjecutadas = new ArrayList<>();
+    public Robot( List<ITarea> tareasPendientes) {
+        this.tareasPendientes = tareasPendientes;
+    }
+
+    List<ITarea> tareasEjecutadas = new ArrayList<>();
+
+    public void addTareaEjecutada(ITarea tarea) {
+        this.tareasEjecutadas.add(tarea);
+    }
+
+    public void removeTareasPendientes(ITarea tarea) {
+        this.tareasPendientes.remove(tarea);
+    }
+
+    public void diminuirBateria(Double unValor) {
+        bateria = Double.max(0, bateria - unValor);
+    }
+
+    public void cargarBateria(Double unValor) {
+        bateria = Double.min(0, bateria + unValor);
     }
 
     public Double getBateria() {
         return bateria;
     }
 
-    public Double getDuracionEnMinutos() {
-        return duracionEnMinutos;
+    public Double getTiempoRestante() {
+        return 100 / duracionEnMinutos * bateria;
     }
 
-    public Double getAumentoPorCarga() {
-        return aumentoPorCarga;
-    }
-
-    public List<TareaEjecutada> getTareasEjecutadas() {
+    public List<ITarea> getTareasEjecutadas() {
         return tareasEjecutadas;
     }
 
-    public void ejecutarTareas(Tarea tarea) {
-        tarea.ejecutar(this);
+    public void execute() {
+        this.tareasPendientes.stream().forEach(tarea -> tarea.execute(this));
     }
 
-    public void disminuirBateria(Double porcentaje) {
-        bateria -= porcentaje;
-        if (bateria < 0) {
-            bateria = 0.0;
-        }
-    }
-
-    public void aumentarBateria(Double porcentaje) {
-        bateria += porcentaje;
-        if (bateria > 100) {
-            bateria = 100.0;
-        }
-    }
-
-    public void agregarTareaEjecutada(String descripcion,Integer duracion) {
-        tareasEjecutadas.add(new TareaEjecutada(descripcion,duracion));
-    }
 }

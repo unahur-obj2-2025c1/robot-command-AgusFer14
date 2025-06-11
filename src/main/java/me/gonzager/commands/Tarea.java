@@ -2,38 +2,20 @@ package me.gonzager.commands;
 
 import me.gonzager.domain.Robot;
 
-public abstract class Tarea  {
+public abstract class Tarea  implements ITarea{
 
-    private String descripcion;
-    private Integer duracion;
-    private Double consumoBateria;
+    protected Integer duracion = 0;
 
-    public Tarea(String descripcion, Integer duracion, Double consumoBateria) {
-        this.descripcion = descripcion;
-        this.duracion = duracion;
-        this.consumoBateria = consumoBateria;
+    public void execute(Robot robot) {
+        this.doExecute(robot);
+        robot.removeTareasPendientes(this);
+        robot.addTareaEjecutada(this);
     }
 
-    public void ejecutar(Robot robot) {
-        if(consumoBateria > 0) {
-            realizarTarea(robot);
-            robot.disminuirBateria(consumoBateria);
-            robot.agregarTareaEjecutada(descripcion,duracion);
-        }
-    }
-
-    protected abstract void realizarTarea(Robot robot);
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public Integer getDuracion() {
+    public Integer duracion() {
         return duracion;
     }
 
-    public Double getConsumoBateria() {
-        return consumoBateria;
-    }
+    public abstract void doExecute(Robot robot);
 
 }
